@@ -11,7 +11,8 @@ import { CartContext } from '../../contexts/cart.context';
 import { signOutUser } from '../../utils/firebase/firebase.utils';
 
 import CartDropdown from '../../components/cart-dropdown/cart-dropdown.component';
-import './navigation.styles.scss';
+import { NavigationContainer, NavLinks, NavLink, LogoContainer } from './navigation.styles';
+
 const Navigation = () => {
     const { currentUser } = useContext(UserContext);
     const { isCartOpen } = useContext(CartContext);
@@ -21,28 +22,28 @@ const Navigation = () => {
 
     return(
         <Fragment>
-            <div className='navigation'>
-                <Link className='logo-container' to='/'>
+            <NavigationContainer>
+                <LogoContainer to='/'>
                     <div><Logo /></div>
-                </Link>
-                <div className='nav-links-container'>
-                    <Link className='nav-link' to='/shop'>
+                </LogoContainer>
+                <NavLinks>
+                    <NavLink to='/shop'>
                         Shop
-                    </Link>
+                    </NavLink>
                     {
                         currentUser? (
-                            <span className='nav-link' onClick={signOutUser}>{' '}Sign Out{' '}</span>
+                            <NavLink as='span' onClick={signOutUser}>{' '}Sign Out{' '}</NavLink>
                         ) : (
-                            <Link className='nav-link' to='/auth'>
+                            <NavLink to='/auth'>
                                 Sign In
-                            </Link>
+                            </NavLink>
                         )
                     }
                     <CartIcon />
-                </div>
+                </NavLinks>
                 {isCartOpen && <CartDropdown />}
                 {/* components are always true since they are functions! if isCartOpen returns true then return cartdropdowncomponent */}
-            </div>
+            </NavigationContainer>
             <Outlet /> 
             {/* outlet render rest of the Routes */}
         </Fragment>

@@ -1,16 +1,15 @@
-import { useState  } from "react";
+import { useState } from "react";
 
 import FormInput from '../form-input/form-input.component';
-import Button from '../button/button.component';
+import Button, { BUTTON_TYPE_CLASSES } from '../button/button.component';
 
 import { 
     // createAuthUserWithEmailAndPassword, 
     signInWithGooglePopup,
-    createUserDocumentFromAuth,
-    signInAuthUserWithEmailAndPassword 
+    signInAuthUserWithEmailAndPassword, 
 } from "../../utils/firebase/firebase.utils";
 
-import './sign-in-form.styles.scss';
+import { SignInContainer, ButtonsContainer } from './sign-in-form.styles';
 
 const defaultformFields = {
     email: '',
@@ -35,8 +34,7 @@ const SignInForm = () => {
         event.preventDefault();
         
         try{
-            const { user } = await signInAuthUserWithEmailAndPassword(email, password);
-            
+            await signInAuthUserWithEmailAndPassword(email, password);
             resertFormFields();
         }catch(err){
             switch(err.code){
@@ -59,7 +57,7 @@ const SignInForm = () => {
     };
 
     return(
-        <div className="sign-in-container">
+        <SignInContainer>
             <h2>Already have an account?</h2>
             <span>Sign in with your email and password</span>
             <form onSubmit={handleSubmit}>
@@ -81,12 +79,12 @@ const SignInForm = () => {
                     value={password} 
                     required
                 />
-                <div className='buttons-container'>
+                <ButtonsContainer>
                     <Button childern="Sign In" type='submit'>Sign In</Button>
-                    <Button type="button" buttonType='google' childern="Google Sign In" onClick={SignInWithGoodle}>gSign In</Button>
-                </div>
+                    <Button buttonType={BUTTON_TYPE_CLASSES.google} children="Google Sign In" onClick={SignInWithGoodle}/>
+                </ButtonsContainer>
             </form>
-        </div>
+        </SignInContainer>
 
     );
 };
