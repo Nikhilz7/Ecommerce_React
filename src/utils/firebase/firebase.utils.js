@@ -16,7 +16,6 @@ import {
     getDoc,
     setDoc,
     collection,
-    collectBatch,
     writeBatch,
     query,
     getDocs,
@@ -63,7 +62,7 @@ export const getCategoriesAndDocuments = async () => {
     const collectionRef = collection(db, 'categories');
     const q = query(collectionRef);
 
-    await Promise.reject(new Error('Cannot find categories'));
+    // await Promise.reject(new Error('Cannot find categories'));
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs.map((docSnapshot) => docSnapshot.data());
         
@@ -101,7 +100,7 @@ export const createUserDocumentFromAuth = async (userAuth, additionalInformation
         }
     }
 
-    return userDocRef;
+    return userSnapshot;
 
 };
 
@@ -122,4 +121,17 @@ export const signOutUser = async () => await signOut(auth);
 export const OnAuthStateChangeListener = (callback) =>{     //creates a listener with callback as next
     
     onAuthStateChanged(auth, callback);
+}
+
+export const getCurrentUser = () => {
+    return new Promise((resolve, reject) =>{
+        const unsubscribe = onAuthStateChanged(
+            auth, 
+            (userAuth) => {
+                unsubscribe();
+                resolve(userAuth);
+            },
+            reject
+        )
+    })
 }
